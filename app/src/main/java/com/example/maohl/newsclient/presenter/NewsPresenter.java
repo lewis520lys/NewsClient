@@ -3,6 +3,7 @@ package com.example.maohl.newsclient.presenter;
 import com.example.maohl.newsclient.bean.LastNews;
 import com.example.maohl.newsclient.contract.NewsContract;
 import com.example.maohl.newsclient.interfac.CallBackLastNews;
+import com.example.maohl.newsclient.interfac.OnRequsetNetLisnter;
 import com.example.maohl.newsclient.model.NewsModel;
 
 import java.util.List;
@@ -21,20 +22,42 @@ public class NewsPresenter implements NewsContract.Presenter {
     }
     @Override
     public void getBeforeNews(String data) {
+        view.showDialog();
        model.getBeforeNews(new CallBackLastNews() {
            @Override
            public void result(List<LastNews.StoriesBean> storiesBeans) {
                view.refreshRecyView(storiesBeans);
            }
-       },data);
+       }, data, new OnRequsetNetLisnter() {
+           @Override
+           public void requsetSucess() {
+              view.hideDialog();
+           }
+
+           @Override
+           public void requsetError() {
+               view.hideDialog();
+           }
+       });
     }
 
     @Override
     public void getLastNews() {
+        view.showDialog();
      model.getLastNews(new CallBackLastNews() {
          @Override
          public void result(List<LastNews.StoriesBean> storiesBeans) {
              view.refreshRecyView(storiesBeans);
+         }
+     }, new OnRequsetNetLisnter() {
+         @Override
+         public void requsetSucess() {
+             view.hideDialog();
+         }
+
+         @Override
+         public void requsetError() {
+             view.hideDialog();
          }
      });
     }

@@ -1,5 +1,6 @@
 package com.example.maohl.newsclient;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,6 +20,7 @@ public class MainActivity extends AppCompatActivity implements NewsContract.View
 
     private RecyclerView recyView;
     private NewsPresenter newsPresenter;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +35,17 @@ public class MainActivity extends AppCompatActivity implements NewsContract.View
 
     private void initView() {
         recyView = (RecyclerView) findViewById(R.id.recyView);
+        progressDialog = new ProgressDialog(this);
+    }
+
+    @Override
+    public void showDialog() {
+        progressDialog.show();
+    }
+
+    @Override
+    public void hideDialog() {
+        progressDialog.cancel();
     }
 
     @Override
@@ -41,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements NewsContract.View
            @Override
            public void convert(CommonAdapter.ViewHolder holder, LastNews.StoriesBean o, int position) {
                ImageView head = (ImageView) holder.getView(R.id.image);
-               Glide.with(MainActivity.this).load(o.getImages()).into(head);
+               Glide.with(MainActivity.this).load(o.getImages().get(0)).into(head);
                holder.setText(R.id.title,o.getTitle());
            }
        }));
